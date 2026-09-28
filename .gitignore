@@ -31,3 +31,9 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+repo/*
+.codebuddy/*
+
+# APK 基线（由 tools/sync_baseline.ps1 生成，不入库）
+app/src/main/assets/www/

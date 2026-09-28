@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+
+	<title>AnimeBattleNext</title>
+
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
+
+	<link rel="shortcut icon" type="image/png" href="./favicon.png">
+
+
+	<script type="text/javascript" src="./AnimeBattleNext.js"></script>
+
+	<script>
+		window.addEventListener ("touchmove", function (event) { event.preventDefault (); }, { capture: false, passive: false });
+	</script>
+
+	<style>
+		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+		#openfl-content { background: #000000; width: 960px; height: 540px; transform-origin: 0 0; }
+
+	</style>
+
+</head>
+<body>
+
+	<noscript>This webpage makes extensive use of JavaScript. Please enable JavaScript in your web browser to view this page.</noscript>
+
+	<div id="openfl-content"></div>
+
+	<script type="text/javascript">
+		lime.embed ("AnimeBattleNext", "openfl-content", 960, 540, { allowHighDPI: true });
+	</script>
+
+	<script type="text/javascript">
+		// 移动端缩放 - 等比缩放 #openfl-content 容器并居中（兼容任意屏幕）
+		(function() {
+			var GW = 960, GH = 540;
+			var ct = document.getElementById('openfl-content');
+			function scale() {
+				var ww = window.innerWidth, wh = window.innerHeight;
+				var s = Math.min(ww / GW, wh / GH);
+				ct.style.transform = 'scale(' + s + ')';
+				ct.style.marginLeft = ((ww - GW * s) / 2) + 'px';
+				ct.style.marginTop  = ((wh - GH * s) / 2) + 'px';
+				console.log("[FIT] viewport=" + ww + "x" + wh + " dpr=" + window.devicePixelRatio + " scale=" + s.toFixed(3));
+			}
+			scale();
+			window.addEventListener('resize', scale);
+		})();
+	</script>
+
+</body>
+</html>

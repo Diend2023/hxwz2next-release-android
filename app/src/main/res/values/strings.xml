@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">幻想纹章新篇</string>
+    <string name="update_title">幻想纹章新篇</string>
+    <string name="status_initializing">初始化本地资源…</string>
+    <string name="status_checking">检查更新…</string>
+    <string name="status_downloading">下载更新 %1$d/%2$d</string>
+    <string name="status_up_to_date">已是最新版本</string>
+    <string name="status_entering">正在进入游戏…</string>
+    <string name="btn_retry">重试</string>
+    <string name="btn_skip">跳过</string>
+</resources>
