@@ -88,8 +88,9 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * 触摸时确保 WebView 持有 view 焦点。
-     * 否则游戏 JS 对输入框的 focus() 触发的 showSoftInput 会因
-     * "view is not served"（PHASE_CLIENT_VIEW_SERVED 失败）被系统拒绝，软键盘无法唤起。
+     * 游戏输入框为 canvas 自绘，Lime 引擎以 20ms 延迟程序性 focus 隐藏 input，
+     * 只有 WebView 已是窗口焦点视图（served view）时该 focus 触发的 showSoftInput 才会被
+     * 系统接受（否则 PHASE_CLIENT_VIEW_SERVED 失败，软键盘无法唤起）。
      */
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (enteringWeb && ::webView.isInitialized && !webView.hasFocus()) {
@@ -166,8 +167,6 @@ class MainActivity : AppCompatActivity() {
         webContainer.visibility = View.VISIBLE
         updatePanel.visibility = View.GONE
         setupWebView()
-        // 初始焦点交给 WebView，保证游戏内输入框 focus() 可直接唤起 IME
-        webView.requestFocus(View.FOCUS_DOWN)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -206,9 +205,10 @@ class MainActivity : AppCompatActivity() {
         // 游戏 JS console 桥接到 logcat（诊断黑屏/JS 异常的关键）
         webView.webChromeClient = object : WebChromeClient() {
             override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+                val msg = consoleMessage.message()
                 Log.d(
                     "WebViewJS",
-                    "[${consoleMessage.messageLevel()}] ${consoleMessage.message()} " +
+                    "[${consoleMessage.messageLevel()}] $msg " +
                         "@${consoleMessage.sourceId()}:${consoleMessage.lineNumber()}"
                 )
                 return true

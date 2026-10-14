@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 不使用 windowFullscreen 主题属性：与代码级 WindowInsetsController.hide() 双通道冲突，
-         会导致 WebView 内 input 聚焦时 IME 请求被拒（PHASE_CLIENT_VIEW_SERVED 失败）。
-         全屏沉浸统一由 MainActivity 代码控制。 -->
     <style name="Theme.Hxwz2" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/bg_dark</item>
         <item name="colorPrimary">@color/accent</item>
         <item name="colorOnPrimary">@color/bg_dark</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 </resources>
