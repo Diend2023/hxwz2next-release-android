@@ -499,6 +499,9 @@ class UpdateManager(private val context: Context) {
     }
 
     private fun downloadFile(remoteKey: String, target: File) {
+        // 对应游戏端 GameResourceUpdater.ensureDirectory：先递归建父目录，
+        // 否则热更仓库新增文件夹时 FileOutputStream 会抛 FileNotFoundException 导致该文件永远下载失败
+        target.parentFile?.mkdirs()
         val url = BASE_URL + encodePath(remoteKey)
         val request = Request.Builder().url(url).build()
         httpClient.newCall(request).execute().use { resp ->

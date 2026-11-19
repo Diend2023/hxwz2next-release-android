@@ -80,6 +80,16 @@ foreach ($m in $map) {
     }
 }
 
+# 告警：repo 中未被 $map 覆盖的顶层目录
+# 热更仓库新增资源目录时必须同步到上面的 $map（以及 UpdateManager.keyToLocalPath），
+# 否则该目录不会进入 APK 基线（首启后只能靠热更补齐）。忽略 .git 等点开头的目录。
+$knownDirs = @($map | ForEach-Object { $_.Src })
+Get-ChildItem $repo -Directory -Force | Where-Object { $_.Name -notlike ".*" } | ForEach-Object {
+    if ($knownDirs -notcontains $_.Name) {
+        Write-Warning ("未映射的顶层目录（不会进入 APK 基线，需同步脚本 `$map）：{0}/" -f $_.Name)
+    }
+}
+
 # 汇总
 $count = (Get-ChildItem $www -Recurse -File).Count
 $size = [math]::Round(((Get-ChildItem $www -Recurse -File | Measure-Object Length -Sum).Sum / 1MB), 1)
