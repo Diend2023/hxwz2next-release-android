@@ -1,10 +1,12 @@
 package com.hxwz2next.app
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.webkit.ConsoleMessage
 import android.webkit.MimeTypeMap
 import android.webkit.WebChromeClient
@@ -79,6 +81,15 @@ class MainActivity : AppCompatActivity() {
     /** 横屏 + 沉浸式全屏（隐藏系统栏，滑动短暂浮现）。 */
     private fun enterFullscreen() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        // 刘海/挖孔：API 28+ 默认 LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT 会把窗口挡在缺口之外，
+        // 缺口区域由系统补黑边（即"刘海区黑屏"）。改为 SHORT_EDGES——横屏时缺口位于左右短边，
+        // 内容得以真正铺满整个屏幕。必须在 setContentView 之前设置。
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val attrs = window.attributes
+            attrs.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            window.attributes = attrs
+        }
         WindowInsetsControllerCompat(window, window.decorView).apply {
             hide(WindowInsetsCompat.Type.systemBars())
             systemBarsBehavior =
